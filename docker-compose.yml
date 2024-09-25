@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  db:
+    image: mysql
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_test_api
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    environment:
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_DATABASE: db_test_api
+      DB_HOST: localhost
+      DB_DIALECT: mysql
+      DB_PORT: 3306
+      NODE_ENV: production
